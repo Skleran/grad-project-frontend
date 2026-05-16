@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { CheckCircle } from 'lucide-react';
+import { ChartBarDefault } from './chart-demo';
 
 export default function DashboardCallout() {
   return (
@@ -11,10 +12,10 @@ export default function DashboardCallout() {
       </h3>
 
       {/* content */}
-      <div className="w-full flex flex-col gap-6">
+      <div className="w-full flex flex-col lg:flex-row gap-6">
         {/* text */}
-        <div className="w-full flex flex-col justify-between gap-4">
-          <p className="text-xl font-semibold pb-1">
+        <div className="w-full flex flex-col justify-between lg:justify-start gap-4">
+          <p className="text-xl lg:text-5xl font-semibold pb-1">
             Command Center Visibility
           </p>
           <p className="text-sm pb-3 text-muted-foreground">
@@ -45,46 +46,48 @@ export default function DashboardCallout() {
         </div>
 
         {/* mockup */}
-        <Card>
-          <CardContent className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center justify-between gap-2">
-                <div className="bg-red-800/35 size-3 border border-red-800 rounded-full" />
-                <div className="bg-yellow-800/35 size-3 border border-yellow-800 rounded-full" />
-                <div className="bg-green-800/35 size-3 border border-green-800 rounded-full" />
+        <div className="w-full">
+          <Card className="w-full max-w-md mx-auto">
+            <CardContent className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="bg-red-800/35 size-3 border border-red-800 rounded-full" />
+                  <div className="bg-yellow-800/35 size-3 border border-yellow-800 rounded-full" />
+                  <div className="bg-green-800/35 size-3 border border-green-800 rounded-full" />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  HELION DASHBOARD
+                </p>
               </div>
-              <p className="text-xs text-muted-foreground">HELION DASHBOARD</p>
-            </div>
 
-            <Separator />
+              <Separator />
 
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2">
-                <div className="flex flex-col w-full bg-muted rounded-md border pt-3 pb-4 px-4 gap-2">
-                  <p className="text-[10px] text-muted-foreground">
-                    ARRAY STATUS
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <div className="rounded-full bg-helion-green size-2" />
-                    <p className="text-base text-helion-green">OPTIMAL</p>
+              <div className="flex flex-col gap-2 pb-4">
+                <div className="flex gap-2">
+                  <div className="flex flex-col w-full bg-muted rounded-md border pt-3 pb-4 px-4 gap-2">
+                    <p className="text-[10px] text-muted-foreground">
+                      ARRAY STATUS
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className="rounded-full bg-helion-green size-2" />
+                      <p className="text-base text-helion-green">OPTIMAL</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col w-full bg-muted rounded-md border pt-3 pb-4 px-4 gap-2">
+                    <p className="text-[10px] text-muted-foreground">
+                      CURRENT YIELD
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-base">42.8 MW</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-col w-full bg-muted rounded-md border pt-3 pb-4 px-4 gap-2">
-                  <p className="text-[10px] text-muted-foreground">
-                    CURRENT YIELD
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <p className="text-base">42.8 MW</p>
-                  </div>
-                </div>
-              </div>
 
-              <div className="flex flex-col w-full bg-muted rounded-md border">
-                qwe
+                <ChartBarDefault />
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
