@@ -5,6 +5,8 @@ import Image from 'next/image';
 export default function Hero() {
   return (
     <div className="flex flex-col gap-10 w-full mt-13 sm:mt-30 items-center justify-between">
+      <div className="absolute top-0 size-1/2  bg-helion-green/15 rounded-full -translate-y-2/3 blur-3xl sm:blur-[150px]" />
+
       <div className="hidden">{/* maybe add eyebrow here? */}</div>
 
       {/* Text */}
@@ -23,7 +25,7 @@ export default function Hero() {
       {/* Buttons */}
       <div className="flex flex-col gap-5 w-full px-5 sm:flex-row sm:justify-center sm:pt-2 sm:pb-12">
         <Button
-          className="bg-helion-green text-black hover:bg-helion-green/70 w-full sm:w-54 sm:h-14 sm:text-base sm:font-semibold"
+          className="bg-helion-green text-black hover:bg-helion-green/70 w-full sm:w-54 sm:h-14 sm:text-base font-semibold"
           size={'lg'}
         >
           Request Quote <ArrowRight className="stroke-2.5 size-4.5" />
@@ -31,19 +33,22 @@ export default function Hero() {
         <Button
           variant={'outline'}
           size={'lg'}
-          className="sm:w-54 sm:h-14 sm:text-base sm:font-semibold"
+          className="sm:w-54 sm:h-14 sm:text-base"
         >
           View Technical Specs
         </Button>
       </div>
-      <div className="h-100 sm:h-150 relative w-full rounded-lg overflow-hidden">
-        <Image
-          src={'/images/solar-panel.png'}
-          fill
-          quality={100}
-          alt="Image of solar panel"
-          className="object-cover"
-        />
+      <div className="h-100 sm:h-150 relative w-full overflow-visible">
+        <div className="absolute h-full w-full bg-helion-green/10 blur-2xl rounded-lg" />
+        <div className="rounded-lg h-full w-full relative overflow-hidden">
+          <Image
+            src={'/images/solar-panel.png'}
+            fill
+            quality={100}
+            alt="Image of solar panel"
+            className="object-cover"
+          />
+        </div>
       </div>
     </div>
   );

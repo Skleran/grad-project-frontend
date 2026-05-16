@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist_Mono, Plus_Jakarta_Sans } from 'next/font/google';
+import { Geist_Mono, Plus_Jakarta_Sans, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -11,6 +11,11 @@ const jakarta = Plus_Jakarta_Sans({
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-grotesk',
   subsets: ['latin'],
 });
 
@@ -32,6 +37,7 @@ export default function RootLayout({
         'h-full',
         'antialiased',
         geistMono.variable,
+        spaceGrotesk.variable,
         'font-sans',
         jakarta.variable,
       )}
