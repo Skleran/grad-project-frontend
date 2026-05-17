@@ -5,6 +5,7 @@ import CoreMechanism from './_components/core-mechanism';
 import Comparison from './_components/comparison';
 import DashboardCallout from './_components/dashboard-callout';
 import HardwareComponents from './_components/hardware-components';
+import { ContactForm } from './_components/contact-form';
 
 export default function Home() {
   return (
@@ -20,6 +21,8 @@ export default function Home() {
         <DashboardCallout />
         <Separator className="my-14" />
         <HardwareComponents />
+        <Separator className="my-14" />
+        <ContactForm />
       </main>
     </div>
   );

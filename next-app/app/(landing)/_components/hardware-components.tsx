@@ -120,6 +120,7 @@ function HardwareMobile() {
               <Image
                 src={item.imageSrc}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
                 alt={`${item.name} module`}
               />
@@ -195,6 +196,7 @@ function HardwareDesktop() {
               src={activeItem.imageSrc}
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               alt={`${activeItem.name} detail view`}
             />
           </div>
