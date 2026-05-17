@@ -1,3 +1,7 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import {
   Cpu,
   Wifi,
@@ -8,6 +12,7 @@ import {
   CircuitBoard,
 } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 
 const hardwareData = [
   {
@@ -76,7 +81,25 @@ const hardwareData = [
 
 export default function HardwareComponents() {
   return (
-    <div className="w-full pb-[50vh] relative">
+    <>
+      <h3 className="text-helion-green font-grotesk font-thin text-start w-full max-w-5xl mx-auto mb-6">
+        HARDWARE COMPONENTS
+      </h3>
+
+      <div className="block md:hidden">
+        <HardwareMobile />
+      </div>
+
+      <div className="hidden md:block w-full">
+        <HardwareDesktop />
+      </div>
+    </>
+  );
+}
+
+function HardwareMobile() {
+  return (
+    <div className="w-full relative">
       {hardwareData.map((item, index) => {
         const Icon = item.icon;
 
@@ -119,4 +142,78 @@ export default function HardwareComponents() {
   );
 }
 
-// great! now i will be building the desktop version for this section, i will use a bit approach, it will be a two column, component names to be on left, and their description on right,
+function HardwareDesktop() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const activeItem = hardwareData[activeIndex];
+
+  return (
+    <div className="w-full max-w-5xl mx-auto flex border rounded-xl min-h-125 p-4 bg-background">
+      {/* buttons */}
+      <div className="flex w-full max-w-72 flex-col gap-2 pr-4 overflow-y-auto">
+        {hardwareData.map((item, index) => {
+          const isActive = activeIndex === index;
+          const Icon = item.icon;
+
+          return (
+            <Button
+              key={item.name}
+              variant={isActive ? 'secondary' : 'ghost'}
+              className={`h-16 justify-start px-4 transition-all ${
+                isActive
+                  ? 'bg-helion-green/10 text-helion-green hover:text-helion-green hover:bg-helion-green/15'
+                  : 'text-muted-foreground'
+              }`}
+              onClick={() => setActiveIndex(index)}
+            >
+              <Icon
+                className={`mr-3 size-5 ${isActive ? 'stroke-helion-green' : 'stroke-muted-foreground'}`}
+              />
+              <span className="font-semibold">{item.name}</span>
+            </Button>
+          );
+        })}
+      </div>
+
+      <Separator orientation="vertical" className="h-auto" />
+
+      {/* content */}
+      <div className="w-full flex flex-col pl-8 py-2 relative">
+        <div
+          key={activeItem.name}
+          className="flex flex-col h-full animate-in fade-in slide-in-from-right-4 duration-500 fill-mode-forwards"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <activeItem.icon className="size-8 stroke-helion-green" />
+            <h3 className="text-3xl font-bold tracking-tight">
+              {activeItem.name}
+            </h3>
+          </div>
+
+          <div className="relative h-64 w-full rounded-lg overflow-hidden mb-8 border bg-muted/20">
+            <Image
+              src={activeItem.imageSrc}
+              fill
+              className="object-cover"
+              alt={`${activeItem.name} detail view`}
+            />
+          </div>
+
+          <div className="flex flex-col gap-5 mt-auto">
+            <p className="text-xl font-medium text-foreground leading-snug">
+              {activeItem.description}
+            </p>
+            {/* <div className="bg-muted/30 p-4 rounded-lg border border-border/50"> */}
+            <p className="text-muted-foreground leading-relaxed">
+              {/* <span className="font-semibold text-helion-green tracking-wide uppercase text-sm mr-3">
+                  Core Benefit
+                </span> */}
+              {activeItem.benefit}
+            </p>
+            {/* </div> */}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
