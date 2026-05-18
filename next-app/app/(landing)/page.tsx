@@ -6,11 +6,12 @@ import Comparison from './_components/comparison';
 import DashboardCallout from './_components/dashboard-callout';
 import HardwareComponents from './_components/hardware-components';
 import { ContactForm } from './_components/contact-form';
+import { Footer } from './_components/footer';
 
 export default function Home() {
   return (
     <div className="flex flex-col flex-1 w-full items-center justify-center font-sans">
-      <main className="flex flex-1 w-full max-w-7xl px-6 flex-col items-center min-h-500 pb-24">
+      <main className="flex flex-1 w-full max-w-7xl px-6 flex-col items-center min-h-500">
         <Navbar />
         <Hero />
         <Separator className="my-14" />
@@ -23,6 +24,8 @@ export default function Home() {
         <HardwareComponents />
         <Separator className="my-14" />
         <ContactForm />
+        <Separator className="my-14 opacity-0" />
+        <Footer />
       </main>
     </div>
   );
