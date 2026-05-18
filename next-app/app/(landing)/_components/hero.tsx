@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Settings } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Hero() {
@@ -28,14 +28,14 @@ export default function Hero() {
           className="bg-helion-green text-black hover:bg-helion-green/70 w-full sm:w-54 sm:h-14 sm:text-base font-semibold"
           size={'lg'}
         >
-          Request Quote <ArrowRight className="stroke-2.5 size-4.5" />
+          Learn Helion <ArrowRight className="stroke-2.5 size-4.5" />
         </Button>
         <Button
           variant={'outline'}
           size={'lg'}
           className="sm:w-54 sm:h-14 sm:text-base"
         >
-          View Technical Specs
+          <Settings /> Technical Specs
         </Button>
       </div>
       <div className="h-100 sm:h-150 relative w-full overflow-visible">

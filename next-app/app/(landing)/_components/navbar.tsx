@@ -1,5 +1,7 @@
 import { ModeToggle } from '@/components/theme-selector';
 import { Button } from '@/components/ui/button';
+import { LogIn } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Navbar() {
   return (
@@ -19,12 +21,14 @@ export default function Navbar() {
         </div>
         <div className="w-30 sm:flex items-center gap-2 justify-end hidden">
           <ModeToggle />
-          <Button
-            size={'lg'}
-            className="bg-helion-green font-semibold text-black px-4 hover:bg-helion-green/50 dark:hover:bg-helion-green/80"
-          >
-            Get a Quote
-          </Button>
+          <Link href={'/login/'}>
+            <Button
+              size={'lg'}
+              className="bg-helion-green font-semibold text-black px-4 hover:bg-helion-green/50 dark:hover:bg-helion-green/80"
+            >
+              Log In <LogIn />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
