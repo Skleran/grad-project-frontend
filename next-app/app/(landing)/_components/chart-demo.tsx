@@ -38,7 +38,7 @@ const chartConfig = {
 
 export function ChartBarDefault() {
   return (
-    <Card className="bg-muted rounded-md ring-0 border">
+    <Card className="bg-muted/40 rounded-md ring-0 border">
       <CardHeader>
         <CardTitle>Energy Generation</CardTitle>
         <CardDescription>January - June 2026</CardDescription>

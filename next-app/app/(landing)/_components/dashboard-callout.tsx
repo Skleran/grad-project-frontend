@@ -54,9 +54,9 @@ export default function DashboardCallout() {
               <CardContent className="flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center justify-between gap-2">
-                    <div className="bg-red-800/35 size-3 border border-red-800 rounded-full" />
-                    <div className="bg-yellow-800/35 size-3 border border-yellow-800 rounded-full" />
-                    <div className="bg-green-800/35 size-3 border border-green-800 rounded-full" />
+                    <div className="bg-red-500/45 dark:bg-red-800/35 size-3 border border-red-500 dark:border-red-800 rounded-full" />
+                    <div className="bg-yellow-400/45 dark:bg-yellow-800/35 size-3 border border-yellow-500 dark:border-yellow-800 rounded-full" />
+                    <div className="bg-green-400/45 dark:bg-green-800/35 size-3 border border-green-400 dark:border-green-800 rounded-full" />
                   </div>
                   <p className="text-xs text-muted-foreground">
                     HELION DASHBOARD
@@ -67,7 +67,7 @@ export default function DashboardCallout() {
 
                 <div className="flex flex-col gap-2 pb-4">
                   <div className="flex gap-2">
-                    <div className="flex flex-col w-full bg-muted rounded-md border pt-3 pb-4 px-4 gap-2">
+                    <div className="flex flex-col w-full bg-muted/40 rounded-md border pt-3 pb-4 px-4 gap-2">
                       <p className="text-[10px] text-muted-foreground">
                         ARRAY STATUS
                       </p>
@@ -76,7 +76,7 @@ export default function DashboardCallout() {
                         <p className="text-base text-helion-green">OPTIMAL</p>
                       </div>
                     </div>
-                    <div className="flex flex-col w-full bg-muted rounded-md border pt-3 pb-4 px-4 gap-2">
+                    <div className="flex flex-col w-full bg-muted/40 rounded-md border pt-3 pb-4 px-4 gap-2">
                       <p className="text-[10px] text-muted-foreground">
                         CURRENT YIELD
                       </p>
@@ -96,33 +96,3 @@ export default function DashboardCallout() {
     </div>
   );
 }
-
-/* Gradient */
-
-// position: absolute;
-// left: 0px;
-// right: 0px;
-// top: 1px;
-// bottom: 1px;
-
-// background: radial-gradient(70.71% 70.71% at 50% 50%, rgba(0, 255, 65, 0.0828) 0%, rgba(18, 20, 20, 0.23) 63.46%, rgba(18, 20, 20, 0.23) 100%);
-
-// /* Inside auto layout */
-// flex: none;
-// order: 0;
-// flex-grow: 0;
-// z-index: 0;
-
-// Buttons
-
-// width: 12px;
-// height: 12px;
-
-// background: rgba(239, 68, 68, 0.2);
-// border: 1px solid rgba(239, 68, 68, 0.5);
-// border-radius: 9999px;
-
-// /* Inside auto layout */
-// flex: none;
-// order: 0;
-// flex-grow: 0;

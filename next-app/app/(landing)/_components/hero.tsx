@@ -4,8 +4,8 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <div className="flex flex-col gap-10 w-full mt-13 sm:mt-30 items-center justify-between">
-      <div className="absolute top-0 size-1/2  bg-helion-green/15 rounded-full -translate-y-2/3 blur-3xl sm:blur-[150px]" />
+    <div className="flex flex-col gap-10 w-full mt-13 sm:mt-32 items-center justify-between">
+      <div className="absolute top-0 size-1/2 bg-helion-green/25 dark:bg-helion-green/15 rounded-full -translate-y-2/3 blur-3xl sm:blur-[150px]" />
 
       <div className="hidden">{/* maybe add eyebrow here? */}</div>
 

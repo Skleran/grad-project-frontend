@@ -16,13 +16,13 @@ export default function Home() {
         <Hero />
         <Separator className="my-14" />
         <CoreMechanism />
-        <Separator className="my-14" />
+        <Separator className="my-14 lg:my-20" />
         <Comparison />
-        <Separator className="my-14" />
+        <Separator className="my-14 lg:my-20" />
         <DashboardCallout />
-        <Separator className="my-14" />
+        <Separator className="my-14 lg:my-16" />
         <HardwareComponents />
-        <Separator className="my-14" />
+        <Separator className="my-14 lg:my-20" />
         <ContactForm />
         <Separator className="my-14 opacity-0" />
         <Footer />

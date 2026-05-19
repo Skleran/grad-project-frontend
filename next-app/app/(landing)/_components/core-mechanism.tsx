@@ -15,7 +15,9 @@ export default function CoreMechanism() {
         <h3 className="text-helion-green font-grotesk font-thin">
           CORE MECHANICS
         </h3>
-        <p className="text-xl font-semibold pb-1">Dual-Axis Mechanism</p>
+        <p className="text-xl lg:text-5xl font-semibold pb-1">
+          Dual-Axis Mechanism
+        </p>
         <p className="text-sm md:text-base">
           Precision tracking mechanics designed for high-yield energy harvesting
           across all geographic latitudes.

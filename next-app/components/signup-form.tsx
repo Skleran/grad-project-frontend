@@ -59,7 +59,12 @@ export function SignupForm({
                 </FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button
+                  type="submit"
+                  className="bg-helion-green hover:bg-helion-green/70 text-black"
+                >
+                  Create Account
+                </Button>
               </Field>
               {/* <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with

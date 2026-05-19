@@ -10,7 +10,9 @@ export default function Comparison() {
         <h3 className="text-helion-green font-grotesk font-thin">
           SYSTEM COMPARISON
         </h3>
-        <p className="text-xl font-semibold pb-1">Efficiency Benchmark</p>
+        <p className="text-xl lg:text-5xl font-semibold pb-1">
+          Efficiency Benchmark
+        </p>
       </div>
 
       {/* content */}
