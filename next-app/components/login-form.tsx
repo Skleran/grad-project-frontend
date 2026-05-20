@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,16 +12,24 @@ import {
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useActionState } from 'react';
+import { logIn, type FormState } from '@/app/lib/actions';
+import { Loader2 } from 'lucide-react';
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
+  const [state, formAction, isPending] = useActionState(logIn, {
+    status: 'idle',
+    message: '',
+  } as FormState);
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form action={formAction} className="p-6 md:p-8">
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -27,10 +37,18 @@ export function LoginForm({
                   Login to your Acme Inc account
                 </p>
               </div>
+
+              {state.status === 'error' && (
+                <div className="rounded-lg bg-red-500/10 border border-red-500/25 p-3 text-red-500 text-sm font-medium text-center">
+                  {state.message}
+                </div>
+              )}
+
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -46,14 +64,22 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" name="password" type="password" required />
               </Field>
               <Field>
                 <Button
                   type="submit"
-                  className="bg-helion-green hover:bg-helion-green/70 text-black"
+                  disabled={isPending}
+                  className="bg-helion-green hover:bg-helion-green/70 text-black flex items-center justify-center gap-2"
                 >
-                  Login
+                  {isPending ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />
+                      Logging in...
+                    </>
+                  ) : (
+                    'Login'
+                  )}
                 </Button>
               </Field>
               {/* <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
@@ -98,6 +124,7 @@ export function LoginForm({
               src="/images/solar-panel.png"
               alt="Image"
               fill
+              sizes="50vw"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.7]"
             />
           </div>

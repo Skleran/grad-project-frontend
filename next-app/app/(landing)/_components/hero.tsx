@@ -45,7 +45,7 @@ export default function Hero() {
             src={'/images/solar-panel.png'}
             fill
             priority
-            loading="eager"
+            sizes="100vw"
             // quality={100}
             alt="Image of solar panel"
             className="object-cover"
