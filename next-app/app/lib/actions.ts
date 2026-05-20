@@ -14,6 +14,14 @@ export async function submitInquiry(
   const email = formData.get('email');
   const specifics = formData.get('specifics');
 
+  console.log('Inquiry form submission:', {
+    name,
+    company,
+    email,
+    specifics,
+    previousStatus: prevState.status,
+  });
+
   await new Promise((resolve) => setTimeout(resolve, 1500));
 
   return {

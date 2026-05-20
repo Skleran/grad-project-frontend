@@ -33,7 +33,7 @@ export default function CoreMechanism() {
               Azimuth Tracking
             </CardTitle>
             <CardDescription>
-              Precise horizontal rotation following the sun's path from sunrise
+              Precise horizontal rotation following the {"sun's"} path from sunrise
               to sunset with ±0.05° resolution.
             </CardDescription>
           </CardHeader>

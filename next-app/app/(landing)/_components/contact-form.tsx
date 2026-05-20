@@ -24,14 +24,20 @@ export function ContactForm() {
 
   useEffect(() => {
     if (state.status === 'success') {
-      setShowSuccess(true);
       formRef.current?.reset();
 
-      const timer = setTimeout(() => {
+      const successTimer = setTimeout(() => {
+        setShowSuccess(true);
+      }, 0);
+
+      const hideTimer = setTimeout(() => {
         setShowSuccess(false);
       }, 4500);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(successTimer);
+        clearTimeout(hideTimer);
+      };
     }
   }, [state.status]);
 
