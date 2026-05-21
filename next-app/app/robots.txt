@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://grad-project.erdemkoyuncu.com/sitemap.xml
