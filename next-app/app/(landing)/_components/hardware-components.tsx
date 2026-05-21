@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
+import { ScrollReveal, RevealItem } from '@/components/scroll-reveal';
 
 const hardwareData = [
   {
@@ -81,19 +82,23 @@ const hardwareData = [
 
 export default function HardwareComponents() {
   return (
-    <>
-      <h3 className="text-helion-green font-grotesk font-thin text-start w-full max-w-5xl mx-auto mb-6">
-        HARDWARE COMPONENTS
-      </h3>
+    <ScrollReveal className="w-full flex flex-col items-center">
+      <RevealItem delayIndex={0} className="w-full">
+        <h3 className="text-helion-green font-grotesk font-thin text-start w-full max-w-5xl mx-auto mb-6">
+          HARDWARE COMPONENTS
+        </h3>
+      </RevealItem>
 
-      <div className="block md:hidden">
-        <HardwareMobile />
-      </div>
+      <RevealItem delayIndex={1} direction="up" className="w-full">
+        <div className="block md:hidden">
+          <HardwareMobile />
+        </div>
 
-      <div className="hidden md:block w-full">
-        <HardwareDesktop />
-      </div>
-    </>
+        <div className="hidden md:block w-full">
+          <HardwareDesktop />
+        </div>
+      </RevealItem>
+    </ScrollReveal>
   );
 }
 

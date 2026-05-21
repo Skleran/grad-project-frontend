@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { ScrollReveal, RevealItem } from '@/components/scroll-reveal';
 
 const initialState: FormState = {
   status: 'idle',
@@ -64,113 +65,117 @@ export function ContactForm() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col items-center">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-          Initialize Deployment
-        </h2>
-        <p className="text-muted-foreground">
-          Connect with our engineering team to spec a tracking solution for your
-          next utility-scale project.
-        </p>
-      </div>
-
-      <form
-        ref={formRef}
-        action={formAction}
-        className="w-full flex flex-col gap-6"
-      >
-        {/* name and company */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col gap-2.5">
-            <Label
-              htmlFor="name"
-              className="text-xs text-muted-foreground uppercase tracking-wider"
-            >
-              Full Name
-            </Label>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              required
-              placeholder="John Doe"
-              className="h-12"
-            />
-          </div>
-          <div className="flex flex-col gap-2.5">
-            <Label
-              htmlFor="company"
-              className="text-xs text-muted-foreground uppercase tracking-wider"
-            >
-              Company
-            </Label>
-            <Input
-              id="company"
-              name="company"
-              type="text"
-              required
-              placeholder="Acme Energy"
-              className="h-12"
-            />
-          </div>
+    <ScrollReveal className="w-full max-w-2xl mx-auto flex flex-col items-center">
+      <RevealItem delayIndex={0} className="w-full">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+            Initialize Deployment
+          </h2>
+          <p className="text-muted-foreground">
+            Connect with our engineering team to spec a tracking solution for your
+            next utility-scale project.
+          </p>
         </div>
+      </RevealItem>
 
-        {/* email */}
-        <div className="flex flex-col gap-2.5">
-          <Label
-            htmlFor="email"
-            className="text-xs text-muted-foreground uppercase tracking-wider"
-          >
-            Work Email
-          </Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            required
-            placeholder="john@acme.com"
-            className="h-12"
-          />
-        </div>
-
-        {/* project specifics */}
-        <div className="flex flex-col gap-2.5">
-          <Label
-            htmlFor="specifics"
-            className="text-xs text-muted-foreground uppercase tracking-wider"
-          >
-            Project Specifics
-          </Label>
-          <Textarea
-            id="specifics"
-            name="specifics"
-            required
-            rows={4}
-            placeholder="Estimated MW capacity, location, timeline..."
-            className="min-h-30 resize-none"
-          />
-        </div>
-
-        {/* button */}
-        <Button
-          type="submit"
-          disabled={isPending}
-          className="mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-md bg-helion-green text-black font-semibold hover:bg-helion-green/90 focus-visible:ring-helion-green/50 disabled:opacity-70 disabled:cursor-not-allowed transition-all text-base"
+      <RevealItem delayIndex={1} direction="up" className="w-full">
+        <form
+          ref={formRef}
+          action={formAction}
+          className="w-full flex flex-col gap-6"
         >
-          {isPending ? (
-            <>
-              <Loader2 className="size-5 animate-spin" />
-              Processing...
-            </>
-          ) : (
-            <>
-              Submit Inquiry
-              <Send className="size-4 ml-1" />
-            </>
-          )}
-        </Button>
-      </form>
-    </div>
+          {/* name and company */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2.5">
+              <Label
+                htmlFor="name"
+                className="text-xs text-muted-foreground uppercase tracking-wider"
+              >
+                Full Name
+              </Label>
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                required
+                placeholder="John Doe"
+                className="h-12"
+              />
+            </div>
+            <div className="flex flex-col gap-2.5">
+              <Label
+                htmlFor="company"
+                className="text-xs text-muted-foreground uppercase tracking-wider"
+              >
+                Company
+              </Label>
+              <Input
+                id="company"
+                name="company"
+                type="text"
+                required
+                placeholder="Acme Energy"
+                className="h-12"
+              />
+            </div>
+          </div>
+
+          {/* email */}
+          <div className="flex flex-col gap-2.5">
+            <Label
+              htmlFor="email"
+              className="text-xs text-muted-foreground uppercase tracking-wider"
+            >
+              Work Email
+            </Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="john@acme.com"
+              className="h-12"
+            />
+          </div>
+
+          {/* project specifics */}
+          <div className="flex flex-col gap-2.5">
+            <Label
+              htmlFor="specifics"
+              className="text-xs text-muted-foreground uppercase tracking-wider"
+            >
+              Project Specifics
+            </Label>
+            <Textarea
+              id="specifics"
+              name="specifics"
+              required
+              rows={4}
+              placeholder="Estimated MW capacity, location, timeline..."
+              className="min-h-30 resize-none"
+            />
+          </div>
+
+          {/* button */}
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-md bg-helion-green text-black font-semibold hover:bg-helion-green/90 focus-visible:ring-helion-green/50 disabled:opacity-70 disabled:cursor-not-allowed transition-all text-base"
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="size-5 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                Submit Inquiry
+                <Send className="size-4 ml-1" />
+              </>
+            )}
+          </Button>
+        </form>
+      </RevealItem>
+    </ScrollReveal>
   );
 }
