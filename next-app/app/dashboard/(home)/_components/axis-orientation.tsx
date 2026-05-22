@@ -9,6 +9,7 @@ import {
   CardAction,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Compass } from 'lucide-react';
 
 interface GaugeProps {
   value: number;
@@ -21,7 +22,8 @@ interface GaugeProps {
 function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
   // Coordinates scaled to fill 90%+ of the 100x100 viewBox
   const radius = 41;
-  const center = 50;
+  const centerX = 50;
+  const centerY = type === 'elevation' ? 45 : 50;
 
   let angleRad = 0;
   let pathD = '';
@@ -32,19 +34,18 @@ function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
     const angleDeg = value - 90;
     angleRad = (angleDeg * Math.PI) / 180;
   } else {
-    // Elevation: 0° is horizontal (Right), 90° is vertical (Up)
+    // Elevation: 0° is horizontal (Right), 90° is vertical (Down) when mirrored to bottom
     // Semicircle arc goes from 180° (Left, 0° elevation) to 0° (Right, 180° elevation)
-    // Map 0° elevation to 180° (Left) and 90° elevation to 90° (Up/Center)
     // Angle in SVG space = 180 - value
     const angleDeg = 180 - value;
     angleRad = (angleDeg * Math.PI) / 180;
 
-    // Draw semicircle background arc path (larger radius)
-    pathD = `M 8 55 A ${radius} ${radius} 0 0 1 92 55`;
+    // Draw semicircle background arc path (larger radius) curving down (sweep-flag 0)
+    pathD = `M 8 ${centerY} A ${radius} ${radius} 0 0 0 92 ${centerY}`;
   }
 
-  const pointerX = center + radius * Math.cos(angleRad);
-  const pointerY = center + radius * Math.sin(angleRad);
+  const pointerX = centerX + radius * Math.cos(angleRad);
+  const pointerY = centerY + radius * Math.sin(angleRad);
 
   return (
     <div className="flex flex-col items-center justify-center p-3 w-full">
@@ -55,10 +56,11 @@ function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
           <defs>
             <filter
               id="glow-green"
-              x="-20%"
-              y="-20%"
-              width="140%"
-              height="140%"
+              filterUnits="userSpaceOnUse"
+              x="-10"
+              y="-10"
+              width="120"
+              height="120"
             >
               <feGaussianBlur stdDeviation="2.5" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -72,13 +74,13 @@ function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
                 cx="50"
                 cy="50"
                 r="46"
-                className="fill-none stroke-neutral-800 dark:stroke-neutral-800/80 stroke-1.5"
+                className="fill-none stroke-neutral-200 dark:stroke-neutral-800/80 stroke-1.5"
               />
               <circle
                 cx="50"
                 cy="50"
                 r="41"
-                className="fill-none stroke-neutral-900/40 dark:stroke-neutral-800/40 stroke-dashed stroke-1"
+                className="fill-none stroke-neutral-300/40 dark:stroke-neutral-800/40 stroke-dashed stroke-1"
                 strokeDasharray="2, 3"
               />
               {/* Compass Cardinal Points */}
@@ -131,7 +133,7 @@ function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
                 cx={pointerX}
                 cy={pointerY}
                 r="3"
-                className="fill-helion-green stroke-black stroke-1"
+                className="fill-helion-green stroke-background stroke-1"
               />
             </>
           ) : (
@@ -139,25 +141,25 @@ function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
               {/* Semicircle background arc */}
               <path
                 d={pathD}
-                className="fill-none stroke-neutral-800 dark:stroke-neutral-800/80 stroke-1.5"
+                className="fill-none stroke-neutral-200 dark:stroke-neutral-800/80 stroke-1.5"
               />
               <path
-                d={`M 15 55 A 35 35 0 0 1 85 55`}
-                className="fill-none stroke-neutral-900/40 dark:stroke-neutral-800/40 stroke-dashed stroke-1"
+                d={`M 15 ${centerY} A 35 35 0 0 0 85 ${centerY}`}
+                className="fill-none stroke-neutral-300/40 dark:stroke-neutral-800/40 stroke-dashed stroke-1"
                 strokeDasharray="2, 3"
               />
               {/* Horizon line */}
               <line
                 x1="5"
-                y1="55"
+                y1={centerY}
                 x2="95"
-                y2="55"
-                className="stroke-neutral-800 dark:stroke-neutral-800/50 stroke-1"
+                y2={centerY}
+                className="stroke-neutral-200 dark:stroke-neutral-800/50 stroke-1"
               />
               {/* Angle scale ticks */}
               <text
                 x="8"
-                y="65"
+                y={centerY - 8}
                 className="text-[7px] font-semibold fill-neutral-400 dark:fill-neutral-400"
                 textAnchor="middle"
               >
@@ -165,7 +167,7 @@ function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
               </text>
               <text
                 x="50"
-                y="10"
+                y={centerY + radius + 7}
                 className="text-[7px] font-semibold fill-neutral-400 dark:fill-neutral-400"
                 textAnchor="middle"
               >
@@ -173,7 +175,7 @@ function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
               </text>
               <text
                 x="92"
-                y="65"
+                y={centerY - 8}
                 className="text-[7px] font-semibold fill-neutral-400 dark:fill-neutral-400"
                 textAnchor="middle"
               >
@@ -183,28 +185,28 @@ function OrientationGauge({ value, label, min, max, type }: GaugeProps) {
               {/* Direction pointer line */}
               <line
                 x1="50"
-                y1="55"
+                y1={centerY}
                 x2={pointerX}
                 y2={pointerY}
                 className="stroke-helion-green stroke-2.5"
                 style={{ filter: 'url(#glow-green)' }}
               />
               {/* Center point */}
-              <circle cx="50" cy="55" r="3.5" className="fill-helion-green" />
+              <circle cx="50" cy={centerY} r="3.5" className="fill-helion-green" />
               {/* Pointer head */}
               <circle
                 cx={pointerX}
                 cy={pointerY}
                 r="3"
-                className="fill-helion-green stroke-black stroke-1"
+                className="fill-helion-green stroke-background stroke-1"
               />
             </>
           )}
         </svg>
 
         {/* Numeric Value overlay - Larger typography */}
-        <div className="absolute flex flex-col items-center justify-center mt-66">
-          <span className="tabular-nums font-grotesk text-3xl sm:text-4xl font-bold text-helion-green tracking-tighter filter drop-shadow-[0_0_10px_rgba(0,230,118,0.15)]">
+        <div className="absolute flex flex-col items-center justify-center mt-64 sm:mt-68">
+          <span className="tabular-nums font-grotesk text-2xl sm:text-2xl font-bold text-helion-green tracking-tighter filter drop-shadow-[0_0_10px_rgba(0,230,118,0.15)]">
             {value.toFixed(1)}°
           </span>
         </div>
@@ -244,11 +246,15 @@ export function AxisOrientation() {
   }, []);
 
   return (
-    <Card className="font-grotesk flex flex-col bg-neutral-900/40 dark:bg-black/30 backdrop-blur-md border border-neutral-800 dark:border-neutral-900 shadow-xl rounded-xl h-full justify-between">
-      <CardHeader className="flex flex-row items-center justify-between border-b border-neutral-800/60 pb-3 px-6">
-        <CardTitle className="text-sm font-semibold tracking-wide text-white font-sans">
-          Axis Orientation
-        </CardTitle>
+    <Card className="font-grotesk flex flex-col dark:bg-black/30 backdrop-blur-md shadow-xl rounded-xl h-full justify-between">
+      <CardHeader className="flex flex-row items-center justify-between border-b pb-3 px-6">
+        <div className="flex items-center gap-2">
+          <Compass className="size-4.5 text-helion-green" />
+          <CardTitle className="text-sm font-semibold tracking-wide font-sans">
+            Axis Orientation
+          </CardTitle>
+        </div>
+
         <CardAction>
           <Badge className="bg-helion-green/10 text-helion-green border-helion-green/20 font-grotesk text-[9px] py-0.5 px-2 tracking-wider flex items-center gap-1.5 animate-pulse">
             <span className="h-1.5 w-1.5 rounded-full bg-helion-green inline-block" />

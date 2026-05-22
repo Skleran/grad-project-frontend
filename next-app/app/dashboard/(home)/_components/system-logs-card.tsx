@@ -83,11 +83,11 @@ export function SystemLogsCard() {
   };
 
   return (
-    <Card className="flex flex-col bg-neutral-900/40 dark:bg-black/30 backdrop-blur-md border border-neutral-800 dark:border-neutral-900 shadow-xl rounded-xl h-[360px] justify-between">
-      <CardHeader className="flex flex-row items-center justify-between border-b border-neutral-800/60 pb-3 px-6 shrink-0">
+    <Card className="flex flex-col dark:bg-black/30 backdrop-blur-md shadow-xl rounded-xl h-[360px] justify-between">
+      <CardHeader className="flex flex-row items-center justify-between border-b pb-3 px-6 shrink-0">
         <div className="flex items-center gap-2">
           <Terminal className="size-4.5 text-helion-green" />
-          <CardTitle className="text-sm font-semibold tracking-wide font-sans text-white">
+          <CardTitle className="text-sm font-semibold tracking-wide font-sans">
             System Logs
           </CardTitle>
         </div>
@@ -96,7 +96,7 @@ export function SystemLogsCard() {
             variant="ghost" 
             size="sm" 
             onClick={clearLogs} 
-            className="h-7 text-[10px] text-neutral-400 hover:text-white font-grotesk tracking-widest uppercase hover:bg-neutral-800/50"
+            className="h-7 text-[10px] text-neutral-500 hover:text-foreground dark:text-neutral-400 dark:hover:text-white font-grotesk tracking-widest uppercase"
           >
             <Trash2 className="size-3.5 mr-1" /> Clear
           </Button>
@@ -108,20 +108,20 @@ export function SystemLogsCard() {
         {/* Terminal Container */}
         <div 
           ref={containerRef}
-          className="w-full h-full overflow-y-auto font-mono text-[11px] leading-relaxed p-5 scrollbar-thin scrollbar-thumb-neutral-800"
+          className="w-full h-full overflow-y-auto font-mono text-[11px] leading-relaxed p-5 scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-800"
         >
-          <div className="flex flex-col gap-1.5 text-neutral-300">
+          <div className="flex flex-col gap-1.5 text-neutral-600 dark:text-neutral-300">
             {logs.map((log, idx) => {
-              let badgeColor = 'text-blue-400';
+              let badgeColor = 'text-blue-500 dark:text-blue-400';
               if (log.level === 'OK') badgeColor = 'text-helion-green';
-              if (log.level === 'WARN') badgeColor = 'text-yellow-500';
-              if (log.level === 'ERROR') badgeColor = 'text-red-500';
+              if (log.level === 'WARN') badgeColor = 'text-yellow-600 dark:text-yellow-500';
+              if (log.level === 'ERROR') badgeColor = 'text-red-600 dark:text-red-500';
 
               return (
-                <div key={idx} className="flex items-start gap-2 hover:bg-neutral-800/20 py-0.5 rounded px-1 transition-colors">
-                  <span className="text-neutral-500 select-none">[{log.timestamp}]</span>
+                <div key={idx} className="flex items-start gap-2 hover:bg-neutral-100 dark:hover:bg-neutral-800/20 py-0.5 rounded px-1 transition-colors">
+                  <span className="text-neutral-400 dark:text-neutral-500 select-none">[{log.timestamp}]</span>
                   <span className={`${badgeColor} font-bold select-none`}>{log.level}</span>
-                  <span className="text-neutral-300 dark:text-neutral-200">{log.message}</span>
+                  <span className="text-neutral-700 dark:text-neutral-200">{log.message}</span>
                 </div>
               );
             })}

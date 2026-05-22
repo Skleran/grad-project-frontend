@@ -102,7 +102,7 @@ export function ProductionStats() {
   }, []);
 
   return (
-    <Card className="flex flex-col bg-neutral-900/40 dark:bg-black/30 backdrop-blur-md border border-neutral-800 dark:border-neutral-900 shadow-xl rounded-xl h-full divide-y divide-neutral-800/60 justify-between overflow-hidden">
+    <Card className="flex flex-col dark:bg-black/30 backdrop-blur-md shadow-xl rounded-xl h-full divide-y justify-between overflow-hidden">
       {/* Current Production Section */}
       <CardContent className="flex-1 flex flex-col justify-between py-6 px-6">
         <div className="flex items-center justify-between shrink-0">
@@ -111,11 +111,11 @@ export function ProductionStats() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-helion-green opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-helion-green"></span>
             </span>
-            <span className="text-xs font-semibold text-neutral-300">
+            <span className="text-xs font-semibold text-foreground/90">
               Current Production
             </span>
           </div>
-          <span className="text-[10px] text-neutral-400 dark:text-neutral-500 tabular-nums">
+          <span className="text-[10px] text-muted-foreground tabular-nums">
             Last update {prodTime}
           </span>
         </div>
@@ -125,16 +125,16 @@ export function ProductionStats() {
           {/* Numbers left */}
           <div className="flex flex-col gap-1 shrink-0">
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-bold tracking-tight text-white tabular-nums">
+              <span className="text-4xl font-bold tracking-tight tabular-nums">
                 {production.toFixed(2)}
               </span>
-              <span className="text-xs font-grotesk text-neutral-400 font-medium">
+              <span className="text-xs font-grotesk text-muted-foreground font-medium">
                 KWH
               </span>
             </div>
-            <div className="flex items-center gap-2.5 text-[10px] font-grotesk tracking-wide text-neutral-500 tabular-nums">
+            <div className="flex items-center gap-2.5 text-[10px] font-grotesk tracking-wide text-muted-foreground/80 tabular-nums">
               <span>
-                Min <span className="text-neutral-300 ml-0.5">3.0</span>
+                Min <span className="text-foreground/90 ml-0.5">3.0</span>
               </span>
               <span>
                 Max <span className="text-helion-green ml-0.5">27.1</span>
@@ -170,7 +170,7 @@ export function ProductionStats() {
                     content={
                       <ChartTooltipContent
                         hideLabel
-                        className="bg-neutral-900 border-neutral-800 text-white rounded-lg text-[9px] p-1.5"
+                        className="text-[9px] p-1.5"
                       />
                     }
                   />
@@ -201,11 +201,11 @@ export function ProductionStats() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
             </span>
-            <span className="text-xs font-semibold text-neutral-300">
+            <span className="text-xs font-semibold text-foreground/90">
               Current Usage
             </span>
           </div>
-          <span className="text-[10px] text-neutral-400 dark:text-neutral-500 tabular-nums">
+          <span className="text-[10px] text-muted-foreground tabular-nums">
             Last update {usageTime}
           </span>
         </div>
@@ -215,19 +215,19 @@ export function ProductionStats() {
           {/* Numbers left */}
           <div className="flex flex-col gap-1 shrink-0">
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-bold tracking-tight text-white tabular-nums font-grotesk">
+              <span className="text-4xl font-bold tracking-tight tabular-nums font-grotesk">
                 {usage.toFixed(2)}
               </span>
-              <span className="text-xs font-grotesk text-neutral-400 font-medium">
+              <span className="text-xs font-grotesk text-muted-foreground font-medium">
                 KWH
               </span>
             </div>
-            <div className="flex items-center gap-2.5 text-[10px] tabular-nums font-grotesk tracking-wide text-neutral-500">
+            <div className="flex items-center gap-2.5 text-[10px] tabular-nums font-grotesk tracking-wide text-muted-foreground/80">
               <span>
-                Min <span className="text-neutral-300 ml-0.5">1.1</span>
+                Min <span className="text-foreground/90 ml-0.5">1.1</span>
               </span>
               <span>
-                Max <span className="text-red-400/80 ml-0.5">22.3</span>
+                Max <span className="text-red-600 dark:text-red-400/80 ml-0.5">22.3</span>
               </span>
             </div>
           </div>
@@ -260,7 +260,7 @@ export function ProductionStats() {
                     content={
                       <ChartTooltipContent
                         hideLabel
-                        className="bg-neutral-900 border-neutral-800 text-white rounded-lg text-[9px] p-1.5"
+                        className="text-[9px] p-1.5"
                       />
                     }
                   />

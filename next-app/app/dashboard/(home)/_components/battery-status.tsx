@@ -15,6 +15,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart';
+import { Battery, BatteryFull, BatteryLow } from 'lucide-react';
 
 const chartConfig = {
   capacity: {
@@ -62,11 +63,21 @@ export function BatteryStatus() {
   }, [battery]);
 
   return (
-    <Card className="flex flex-col bg-neutral-900/40 dark:bg-black/30 backdrop-blur-md border border-neutral-800 dark:border-neutral-900 shadow-xl rounded-xl h-full justify-between overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between border-b border-neutral-800/60 pb-3 px-6 shrink-0">
-        <CardTitle className="text-sm font-semibold tracking-wide text-white">
-          Battery
-        </CardTitle>
+    <Card className="flex flex-col dark:bg-black/30 backdrop-blur-md shadow-xl rounded-xl h-full justify-between overflow-hidden">
+      <CardHeader className="flex flex-row items-center justify-between border-b pb-3 px-6 shrink-0">
+        <div className="flex items-center gap-2">
+          {battery <= 20 ? (
+            <BatteryLow className="size-4.5 text-red-500 animate-pulse" />
+          ) : battery <= 75 ? (
+            <Battery className="size-4.5 text-yellow-500" />
+          ) : (
+            <BatteryFull className="size-4.5 text-helion-green" />
+          )}
+          <CardTitle className="text-sm font-semibold tracking-wide">
+            Battery
+          </CardTitle>
+        </div>
+
         <CardDescription className="text-[10px] text-neutral-400 dark:text-neutral-500 tabular-nums">
           Last update {timeAgo}
         </CardDescription>
@@ -79,13 +90,13 @@ export function BatteryStatus() {
           <span className="text-5xl sm:text-6xl font-bold tracking-tighter text-helion-green font-grotesk tabular-nums filter drop-shadow-[0_0_15px_rgba(0,230,118,0.15)]">
             {Math.floor(battery)}%
           </span>
-          <span className="text-xs text-neutral-400 dark:text-neutral-500 font-grotesk font-semibold tracking-widest uppercase">
+          <span className="text-xs text-muted-foreground font-grotesk font-semibold tracking-widest uppercase">
             CAPACITY
           </span>
         </div>
 
         {/* Recharts Area Chart filling the remaining space */}
-        <div className="h-[150px] w-full mt-4 relative">
+        <div className="h-37.5 w-full mt-4 relative">
           <ChartContainer config={chartConfig} className="w-full h-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
@@ -114,10 +125,7 @@ export function BatteryStatus() {
                 <ChartTooltip
                   cursor={false}
                   content={
-                    <ChartTooltipContent
-                      hideLabel
-                      className="bg-neutral-900 border-neutral-800 text-white rounded-lg text-[10px]"
-                    />
+                    <ChartTooltipContent hideLabel className="text-[10px]" />
                   }
                 />
 
@@ -138,7 +146,7 @@ export function BatteryStatus() {
           </ChartContainer>
 
           {/* Absolute overlay labels for chart limits */}
-          <div className="absolute bottom-3 left-6 right-6 flex justify-between items-center text-[9px] font-grotesk text-neutral-500 tracking-wider uppercase pointer-events-none select-none">
+          <div className="absolute bottom-3 left-6 right-6 flex justify-between items-center text-[9px] font-grotesk text-muted-foreground/80 tracking-wider uppercase pointer-events-none select-none">
             <span>24hr ago</span>
             <span>Now</span>
           </div>

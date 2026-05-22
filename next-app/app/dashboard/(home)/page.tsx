@@ -8,6 +8,8 @@ import { ProductionStats } from './_components/production-stats';
 import { WeatherForecast } from './_components/weather-forecast';
 import { SystemLogsCard } from './_components/system-logs-card';
 import { SystemControls } from './_components/system-controls';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function Page() {
   return (
@@ -15,40 +17,42 @@ export default function Page() {
       <DashboardHeader>
         <div className="flex items-center justify-between w-full pr-4">
           <div className="flex flex-col">
-            <h2 className="text-sm font-bold tracking-wider text-white uppercase">
+            <h2 className="text-sm font-bold tracking-wider uppercase">
               Prototype
             </h2>
-            <span className="text-[10px] text-neutral-400 dark:text-neutral-500">
+            <span className="text-[10px] text-muted-foreground">
               Model preview
             </span>
           </div>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] tracking-widest text-neutral-400 hover:text-white uppercase transition-colors"
-          >
-            GitHub
-          </a>
+          <Button asChild variant="ghost">
+            <Link
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] tracking-widest"
+            >
+              GitHub
+            </Link>
+          </Button>
         </div>
       </DashboardHeader>
 
-      <div className="flex flex-1 flex-col gap-6 p-6 pt-0 bg-neutral-950/20">
+      <div className="flex flex-1 flex-col gap-6 p-6 pt-0">
         {/* Top Section: Prototype Image and Axis Orientation */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Solar Panel Model Card */}
-          <Card className="overflow-hidden bg-[#0a0a0a] dark:bg-[#050505] border border-neutral-800 dark:border-neutral-900 shadow-2xl rounded-xl flex flex-col justify-center items-center relative min-h-[340px] group">
+          <Card className="overflow-hidden shadow-2xl rounded-xl dark:bg-black/30 flex flex-col justify-center items-center relative min-h-85 group">
             <div className="absolute top-5 left-6 z-10 flex flex-col">
-              <span className="text-xs font-semibold text-white tracking-wide">
+              <span className="text-xs font-semibold tracking-wide">
                 Prototype Model
               </span>
-              <span className="text-[9px] text-neutral-500 font-grotesk tracking-widest uppercase mt-0.5">
+              <span className="text-[9px] text-muted-foreground font-grotesk tracking-widest uppercase mt-0.5">
                 Interactive Render
               </span>
             </div>
 
-            <div className="relative w-full h-[340px] flex items-center justify-center p-4">
-              <div className="absolute inset-0 bg-radial from-transparent to-black/80 z-1 pointer-events-none" />
+            <div className="relative w-full h-80 flex items-center justify-center overflow-hidden rounded-2xl">
+              {/* <div className="absolute inset-0 dark:bg-radial from-transparent to-black/80 z-1 pointer-events-none" /> */}
               <Image
                 src="/images/solar-panel.png"
                 alt="Solar Panel Prototype 3D Preview"
