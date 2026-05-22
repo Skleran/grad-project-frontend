@@ -156,7 +156,7 @@ function HardwareDesktop() {
   return (
     <div className="w-full max-w-5xl mx-auto flex border rounded-xl min-h-125 p-4 bg-background">
       {/* buttons */}
-      <div className="flex w-full max-w-72 flex-col gap-2 pr-4 overflow-y-auto">
+      <div className="flex w-full max-w-72 flex-col gap-2 pr-4 overflow-y-hidden">
         {hardwareData.map((item, index) => {
           const isActive = activeIndex === index;
           const Icon = item.icon;
