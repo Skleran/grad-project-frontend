@@ -66,7 +66,7 @@ export function SystemControls() {
         </CardAction> */}
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col justify-between p-6 gap-4">
+      <CardContent className="flex-1 flex flex-col justify-between px-6 gap-4">
         {/* Toggle options */}
         <div className="flex flex-col gap-3 shrink-0">
           {/* Auto Track Toggle */}
@@ -108,23 +108,36 @@ export function SystemControls() {
           </div>
 
           {/* Stow toggle */}
-          <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/40 border border-border/50">
+          <div
+            className={cn(
+              'flex items-center justify-between p-2.5 rounded-lg bg-muted/40 border border-border/50 transition-colors',
+              stowed ? 'border-destructive/50 bg-destructive/2' : '',
+            )}
+          >
             <div className="flex flex-col gap-0.5">
               <Label
                 htmlFor="stow-array"
-                className="text-xs font-semibold cursor-pointer"
+                className={cn(
+                  'text-xs font-semibold cursor-pointer transition-colors',
+                  stowed ? 'text-destructive/80' : '',
+                )}
               >
                 Emergency Stow Mode
               </Label>
               <span className="text-[9.5px] text-muted-foreground font-sans">
-                Park panel flat ($0^\circ$ tilt)
+                Park panel flat 0° tilt
               </span>
             </div>
             <Button
-              variant="outline"
+              variant="destructive"
               size="sm"
               onClick={() => setStowed(!stowed)}
-              className={classNameForStowButton(stowed)}
+              className={cn(
+                'text-[10px] h-7 font-grotesk tracking-widest',
+                stowed
+                  ? 'ring-1 ring-destructive/60'
+                  : 'bg-secondary dark:bg-secondary',
+              )}
             >
               <Shield className="size-3.5 mr-1" />
               {stowed ? 'STOWED' : 'STOW'}
@@ -135,7 +148,7 @@ export function SystemControls() {
         {/* Manual Tweaking Controls (active only when autoTrack is disabled) */}
         <div className="flex flex-col gap-2 flex-1 justify-center relative">
           {autoTrack && (
-            <div className="absolute inset-0 bg-background/80 dark:bg-black/50 backdrop-blur-[0.5px] z-10 flex flex-col items-center justify-center rounded-lg border border-dashed border-border text-center p-3 select-none">
+            <div className="absolute inset-0 bg-background/80 dark:bg-black/50 backdrop-blur-3xl z-10 flex flex-col items-center justify-center rounded-lg border border-dashed border-border text-center p-3 select-none">
               <Compass className="size-5 text-muted-foreground mb-1" />
               <span className="text-[10px] font-bold text-foreground/80 font-grotesk tracking-widest uppercase">
                 AUTO-MODE ENGAGED
@@ -156,14 +169,14 @@ export function SystemControls() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-7 w-full text-xs text-muted-foreground hover:text-foreground hover:bg-accent border-border"
+                  className="h-7 flex-1 text-xs text-muted-foreground hover:text-foreground hover:bg-accent border-border"
                 >
                   -1°
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-7 w-full text-xs text-muted-foreground hover:text-foreground hover:bg-accent border-border"
+                  className="h-7 flex-1 text-xs text-muted-foreground hover:text-foreground hover:bg-accent border-border"
                 >
                   +1°
                 </Button>
@@ -179,14 +192,14 @@ export function SystemControls() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-7 w-full text-xs text-muted-foreground hover:text-foreground hover:bg-accent border-border"
+                  className="h-7 flex-1 text-xs text-muted-foreground hover:text-foreground hover:bg-accent border-border"
                 >
                   -1°
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-7 w-full text-xs text-muted-foreground hover:text-foreground hover:bg-accent border-border"
+                  className="h-7 flex-1 text-xs text-muted-foreground hover:text-foreground hover:bg-accent border-border"
                 >
                   +1°
                 </Button>
@@ -219,11 +232,4 @@ export function SystemControls() {
       </CardContent>
     </Card>
   );
-}
-
-function classNameForStowButton(stowed: boolean) {
-  if (stowed) {
-    return 'h-7 text-[10px] font-grotesk tracking-widest border-red-500 bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 shadow-sm font-bold';
-  }
-  return 'h-7 text-[10px] font-grotesk tracking-widest border-border hover:border-red-500/50 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-600 dark:hover:text-red-400 text-muted-foreground';
 }

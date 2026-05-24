@@ -13,8 +13,10 @@ import {
   SidebarMenuButton,
 } from '@/components/ui/sidebar';
 import { NavUser } from '@/components/nav-user';
-import { Sun, Target, Activity, Terminal, Wrench } from 'lucide-react';
+import { Target, Activity, Terminal, Wrench } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import iconSvg from '@/app/icon.svg';
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user?: {
@@ -53,20 +55,26 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r border-sidebar-border"
+      // className="border-r border-sidebar-border"
       {...props}
     >
       {/* Sidebar Header: Branding */}
-      <SidebarHeader className="h-16 flex items-center px-6 border-b border-sidebar-border/60 justify-start">
+      <SidebarHeader className="flex mt-2 px-4 group-data-[collapsible=icon]:items-center justify-start">
         <div className="flex items-center gap-2.5 overflow-hidden">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-helion-green/10 border border-helion-green/20 text-helion-green shrink-0">
-            <Sun className="size-5 fill-helion-green/10 stroke-2 animate-[spin_60s_linear_infinite]" />
+          <div className="flex size-9 items-center justify-center rounded-xl bg-helion-green/10 border border-helion-green/20 shrink-0">
+            <Image
+              src={iconSvg}
+              alt="Helion Logo"
+              width={20}
+              height={20}
+              className="size-5"
+            />
           </div>
           <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
-            <span className="font-bold text-xs tracking-wider uppercase font-sans">
+            <span className="font-bold text-xs tracking-wider uppercase truncate">
               Helion Energy
             </span>
-            <span className="text-[9px] font-grotesk tracking-widest text-helion-green uppercase font-semibold mt-0.5">
+            <span className="text-[9px] font-grotesk tracking-widest text-helion-green uppercase font-semibold mt-0.5 truncate">
               Solar Tracker
             </span>
           </div>
@@ -74,7 +82,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       </SidebarHeader>
 
       {/* Sidebar Navigation */}
-      <SidebarContent className="px-3 py-6 bg-transparent">
+      <SidebarContent className="px-2 py-6 bg-transparent">
         <SidebarMenu className="gap-2">
           {navigationItems.map((item) => {
             const isActive =
@@ -87,10 +95,10 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
                 <SidebarMenuButton
                   asChild
                   className={cn(
-                    'w-full h-11 px-4 rounded-full transition-all duration-300 group-data-[collapsible=icon]:justify-center font-sans text-sm font-semibold tracking-wide border border-transparent',
+                    'w-full h-11 px-4 rounded-full text-sm tracking-wide',
                     isActive
-                      ? 'bg-helion-green text-black shadow-md hover:bg-helion-green/60 hover:text-black'
-                      : 'text-sidebar-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent/50',
+                      ? 'font-semibold bg-helion-green text-black shadow-md hover:bg-helion-green/60 hover:text-black'
+                      : 'text-sidebar-foreground/70 hover:font-semibold transition-all hover:text-sidebar-accent-foreground hover:bg-sidebar-accent/50',
                   )}
                   tooltip={item.title}
                 >
@@ -118,7 +126,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       </SidebarContent>
 
       {/* Sidebar Footer */}
-      <SidebarFooter className="border-t border-sidebar-border/60 p-3 bg-transparent">
+      <SidebarFooter className="border-t border-sidebar-border/60 p-2 bg-transparent">
         <NavUser
           user={
             user || { name: 'Operator', email: 'op@helion.energy', avatar: '' }
