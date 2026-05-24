@@ -6,7 +6,6 @@ import {
   Sun,
   CloudSun,
   Cloud,
-  MoonStar,
   Gauge,
   SunDim,
   Thermometer,
@@ -14,112 +13,249 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+// Helper to map WMO weather codes to our component condition types
+const mapWmoCodeToCondition = (
+  code: number,
+): 'SUNNY' | 'MOSTLY SUNNY' | 'CLOUDY' | 'RAINY' => {
+  if (code === 0 || code === 1) return 'SUNNY';
+  if (code === 2) return 'MOSTLY SUNNY';
+  if (code === 3 || code === 45 || code === 48) return 'CLOUDY';
+  return 'RAINY'; // 51-67, 71-77, 80-86, 95-99
+};
+
+// Helper to render weather icons consistently
+const getWeatherIcon = (
+  cond: string,
+  sizeClass = 'size-4.5',
+  isHourly = false,
+) => {
+  if (isHourly) {
+    switch (cond) {
+      case 'SUNNY':
+        return (
+          <Sun
+            className={cn(
+              sizeClass,
+              'stroke-helion-green fill-helion-green/10',
+            )}
+          />
+        );
+      case 'MOSTLY SUNNY':
+        return (
+          <CloudSun
+            className={cn(
+              sizeClass,
+              'stroke-helion-green/90 fill-helion-green/5',
+            )}
+          />
+        );
+      case 'CLOUDY':
+        return (
+          <Cloud
+            className={cn(
+              sizeClass,
+              'stroke-muted-foreground fill-muted-foreground/5',
+            )}
+          />
+        );
+      case 'RAINY':
+        return (
+          <CloudRain
+            className={cn(sizeClass, 'stroke-blue-400 fill-blue-400/5')}
+          />
+        );
+      default:
+        return (
+          <Sun
+            className={cn(
+              sizeClass,
+              'stroke-helion-green fill-helion-green/10',
+            )}
+          />
+        );
+    }
+  }
+  switch (cond) {
+    case 'SUNNY':
+      return <Sun className={cn(sizeClass, 'text-helion-green')} />;
+    case 'MOSTLY SUNNY':
+      return <CloudSun className={cn(sizeClass, 'text-helion-green/90')} />;
+    case 'CLOUDY':
+      return <Cloud className={cn(sizeClass, 'text-muted-foreground')} />;
+    case 'RAINY':
+      return <CloudRain className={cn(sizeClass, 'text-blue-400')} />;
+    default:
+      return <Sun className={cn(sizeClass, 'text-helion-green')} />;
+  }
+};
+
 export function WeatherForecast() {
+  // Base states derived from API
+  const [baseTemp, setBaseTemp] = React.useState(28);
+  const [baseCondition, setBaseCondition] = React.useState<
+    'SUNNY' | 'MOSTLY SUNNY' | 'CLOUDY' | 'RAINY'
+  >('MOSTLY SUNNY');
+  const [baseIrradiance, setBaseIrradiance] = React.useState(845);
+  const [baseUvIndex, setBaseUvIndex] = React.useState(8.4);
+
+  // Live telemetry states (with sensor noise fluctuation)
   const [temp, setTemp] = React.useState(28);
-  const [condition, setCondition] = React.useState<'SUNNY' | 'MOSTLY SUNNY' | 'CLOUDY' | 'RAINY'>('MOSTLY SUNNY');
+  const [condition, setCondition] = React.useState<
+    'SUNNY' | 'MOSTLY SUNNY' | 'CLOUDY' | 'RAINY'
+  >('MOSTLY SUNNY');
   const [irradiance, setIrradiance] = React.useState(845);
   const [uvIndex, setUvIndex] = React.useState(8.4);
   const [panelTemp, setPanelTemp] = React.useState(42.5);
 
+  // Hourly forecast state
+  const [hourlyForecast, setHourlyForecast] = React.useState<
+    Array<{
+      hour: string;
+      temp: number;
+      icon: React.ReactNode;
+    }>
+  >([
+    {
+      hour: '14:00',
+      temp: 28,
+      icon: getWeatherIcon('SUNNY', 'size-4.5', true),
+    },
+    {
+      hour: '15:00',
+      temp: 27,
+      icon: getWeatherIcon('MOSTLY SUNNY', 'size-4.5', true),
+    },
+    {
+      hour: '16:00',
+      temp: 26,
+      icon: getWeatherIcon('MOSTLY SUNNY', 'size-4.5', true),
+    },
+    {
+      hour: '17:00',
+      temp: 25,
+      icon: getWeatherIcon('CLOUDY', 'size-4.5', true),
+    },
+    {
+      hour: '18:00',
+      temp: 24,
+      icon: getWeatherIcon('CLOUDY', 'size-4.5', true),
+    },
+  ]);
+
+  // Fetch weather data from Open-Meteo
+  React.useEffect(() => {
+    let active = true;
+
+    async function fetchWeather() {
+      try {
+        const res = await fetch(
+          'https://api.open-meteo.com/v1/forecast?latitude=40.98&longitude=28.79&current=temperature_2m,weather_code,uv_index,shortwave_radiation&hourly=temperature_2m,weather_code&timezone=auto',
+        );
+        if (!res.ok) throw new Error('Failed to fetch weather data');
+        const data = await res.json();
+
+        if (!active) return;
+
+        // Extract current data
+        const currentTemp = data.current.temperature_2m;
+        const currentCode = data.current.weather_code;
+        const currentUv = data.current.uv_index ?? 0;
+        const currentIrr = data.current.shortwave_radiation ?? 0;
+
+        const cond = mapWmoCodeToCondition(currentCode);
+
+        setBaseTemp(currentTemp);
+        setBaseCondition(cond);
+        setBaseIrradiance(currentIrr);
+        setBaseUvIndex(currentUv);
+
+        // Update live states immediately on fetch
+        setTemp(currentTemp);
+        setCondition(cond);
+        setIrradiance(Math.round(currentIrr));
+        setUvIndex(currentUv);
+        setPanelTemp(Number((currentTemp + currentIrr * 0.02).toFixed(1)));
+
+        // Extract hourly data (next 5 hours starting from current hour)
+        const hourlyTimes = data.hourly.time;
+        const hourlyTemps = data.hourly.temperature_2m;
+        const hourlyCodes = data.hourly.weather_code;
+
+        // Find index closest to current time
+        const currentTimeMs = new Date(data.current.time).getTime();
+        let closestIndex = hourlyTimes.findIndex(
+          (t: string) => new Date(t).getTime() >= currentTimeMs,
+        );
+        if (closestIndex === -1) closestIndex = 0;
+
+        const forecastList = [];
+        for (let i = 0; i < 5; i++) {
+          const index = closestIndex + i;
+          if (index < hourlyTimes.length) {
+            const timeStr = new Date(hourlyTimes[index]).toLocaleTimeString(
+              [],
+              {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              },
+            );
+            const itemTemp = Math.round(hourlyTemps[index]);
+            const itemCond = mapWmoCodeToCondition(hourlyCodes[index]);
+            forecastList.push({
+              hour: timeStr,
+              temp: itemTemp,
+              icon: getWeatherIcon(itemCond, 'size-4.5', true),
+            });
+          }
+        }
+        setHourlyForecast(forecastList);
+      } catch (err) {
+        console.error('Weather fetch error:', err);
+      }
+    }
+
+    fetchWeather();
+    // Refetch weather data every 5 minutes
+    const fetchInterval = setInterval(fetchWeather, 5 * 60 * 1000);
+
+    return () => {
+      active = false;
+      clearInterval(fetchInterval);
+    };
+  }, []);
+
+  // Live telemetry simulation (minor ambient & solar sensor fluctuations)
   React.useEffect(() => {
     const interval = setInterval(() => {
       setIrradiance((prev) => {
-        const delta = (Math.random() - 0.5) * 15;
-        const next = Math.max(150, Math.min(1000, prev + delta));
-        
-        setUvIndex(Number((next / 100).toFixed(1)));
+        // Minor sensor noise variation around base API irradiance
+        const delta = (Math.random() - 0.5) * 8;
+        const next = Math.max(0, Math.min(1200, baseIrradiance + delta));
 
-        if (next > 800) {
-          setCondition('SUNNY');
-        } else if (next > 600) {
-          setCondition('MOSTLY SUNNY');
-        } else if (next > 300) {
-          setCondition('CLOUDY');
-        } else {
-          setCondition('RAINY');
-        }
+        // Update UV based on fluctuated irradiance
+        setUvIndex(
+          Number(
+            Math.max(0, baseUvIndex + (Math.random() - 0.5) * 0.1).toFixed(1),
+          ),
+        );
 
         return Math.round(next);
       });
 
-      setPanelTemp((prev) => {
-        const delta = (Math.random() - 0.5) * 0.8;
-        return Number(Math.max(15, Math.min(75, prev + delta)).toFixed(1));
-      });
-
       setTemp((prev) => {
-        const delta = (Math.random() - 0.5) * 0.3;
-        return Number(Math.max(10, Math.min(45, prev + delta)).toFixed(1));
+        const delta = (Math.random() - 0.5) * 0.15;
+        return Number(Math.max(-20, Math.min(50, baseTemp + delta)).toFixed(1));
       });
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [baseTemp, baseIrradiance, baseUvIndex]);
 
-  const getWeatherIcon = (cond: string, sizeClass = "size-4.5") => {
-    switch (cond) {
-      case 'SUNNY':
-        return <Sun className={cn(sizeClass, "text-helion-green")} />;
-      case 'MOSTLY SUNNY':
-        return <CloudSun className={cn(sizeClass, "text-helion-green/90")} />;
-      case 'CLOUDY':
-        return <Cloud className={cn(sizeClass, "text-muted-foreground")} />;
-      case 'RAINY':
-        return <CloudRain className={cn(sizeClass, "text-blue-400")} />;
-      default:
-        return <Sun className={cn(sizeClass, "text-helion-green")} />;
-    }
-  };
-
-  // Dynamic weather data for hourly forecast based on current condition and temperature
-  const hourlyData = React.useMemo(() => {
-    // Generate simulated hours (e.g. next 5 hours)
-    const hours = ['14:00', '15:00', '16:00', '17:00', '18:00'];
-    
-    const getForecastForCondition = (cond: typeof condition, offset: number) => {
-      // Simulate weather progression starting from current condition
-      let forecastCond: 'SUNNY' | 'MOSTLY SUNNY' | 'CLOUDY' | 'RAINY' = cond;
-      if (cond === 'SUNNY') {
-        if (offset === 2) forecastCond = 'MOSTLY SUNNY';
-        else if (offset >= 3) forecastCond = 'CLOUDY';
-      } else if (cond === 'MOSTLY SUNNY') {
-        if (offset === 0 || offset === 1) forecastCond = 'SUNNY';
-        else if (offset === 2) forecastCond = 'MOSTLY SUNNY';
-        else forecastCond = 'CLOUDY';
-      } else if (cond === 'CLOUDY') {
-        if (offset === 2 || offset === 3) forecastCond = 'RAINY';
-      } else if (cond === 'RAINY') {
-        if (offset === 2 || offset === 3) forecastCond = 'CLOUDY';
-        else if (offset === 4) forecastCond = 'MOSTLY SUNNY';
-      }
-
-      // Return Lucide icon element based on condition type with styling
-      switch (forecastCond) {
-        case 'SUNNY':
-          return <Sun className="size-4.5 stroke-helion-green fill-helion-green/10" />;
-        case 'MOSTLY SUNNY':
-          return <CloudSun className="size-4.5 stroke-helion-green/90 fill-helion-green/5" />;
-        case 'CLOUDY':
-          return <Cloud className="size-4.5 stroke-muted-foreground fill-muted-foreground/5" />;
-        case 'RAINY':
-          return <CloudRain className="size-4.5 stroke-blue-400 fill-blue-400/5" />;
-        default:
-          return <Sun className="size-4.5 stroke-helion-green fill-helion-green/10" />;
-      }
-    };
-
-    return hours.map((hour, idx) => {
-      // Temperature cools down slightly as the day goes on
-      const tempOffset = -idx;
-      const forecastTemp = Math.round(temp + tempOffset);
-      
-      return {
-        hour,
-        temp: forecastTemp,
-        icon: getForecastForCondition(condition, idx),
-      };
-    });
-  }, [condition, temp]);
+  // Calculate physical solar panel temp: T_ambient + T_gain_from_irradiance (T_gain ≈ 0.02 * Irr)
+  React.useEffect(() => {
+    setPanelTemp(Number((temp + irradiance * 0.02).toFixed(1)));
+  }, [temp, irradiance]);
 
   return (
     <Card className="flex flex-col dark:bg-black/30 backdrop-blur-md shadow-xl rounded-xl h-full justify-between overflow-hidden">
@@ -131,7 +267,7 @@ export function WeatherForecast() {
           </CardTitle>
         </div>
         <span className="text-[9px] font-mono text-helion-green/80 font-bold tracking-wider">
-          LOC: 40.98°N, 28.79°W
+          LOC: 40.98°N, 28.79°E
         </span>
       </CardHeader>
 
@@ -189,11 +325,25 @@ export function WeatherForecast() {
             </div>
             <div className="flex flex-col mt-1.5">
               <span className="text-sm font-bold font-sans">{uvIndex}</span>
-              <span className={cn(
-                "text-[7.5px] font-mono font-bold tracking-wide",
-                uvIndex >= 8 ? "text-red-500" : uvIndex >= 6 ? "text-orange-500" : uvIndex >= 3 ? "text-yellow-500" : "text-green-500"
-              )}>
-                {uvIndex >= 8 ? "Very High" : uvIndex >= 6 ? "High" : uvIndex >= 3 ? "Moderate" : "Low"}
+              <span
+                className={cn(
+                  'text-[7.5px] font-mono font-bold tracking-wide',
+                  uvIndex >= 8
+                    ? 'text-red-500'
+                    : uvIndex >= 6
+                      ? 'text-orange-500'
+                      : uvIndex >= 3
+                        ? 'text-yellow-500'
+                        : 'text-green-500',
+                )}
+              >
+                {uvIndex >= 8
+                  ? 'Very High'
+                  : uvIndex >= 6
+                    ? 'High'
+                    : uvIndex >= 3
+                      ? 'Moderate'
+                      : 'Low'}
               </span>
             </div>
           </div>
@@ -206,11 +356,19 @@ export function WeatherForecast() {
             </div>
             <div className="flex flex-col mt-1.5">
               <span className="text-sm font-bold font-sans">{panelTemp}°</span>
-              <span className={cn(
-                "text-[7.5px] font-mono font-semibold tracking-wide",
-                panelTemp > 60 ? "text-red-500 animate-pulse font-bold" : "text-muted-foreground"
-              )}>
-                {panelTemp > 60 ? "Critical" : panelTemp > 50 ? "Warning" : "Nominal"}
+              <span
+                className={cn(
+                  'text-[7.5px] font-mono font-semibold tracking-wide',
+                  panelTemp > 60
+                    ? 'text-red-500 animate-pulse font-bold'
+                    : 'text-muted-foreground',
+                )}
+              >
+                {panelTemp > 60
+                  ? 'Critical'
+                  : panelTemp > 50
+                    ? 'Warning'
+                    : 'Nominal'}
               </span>
             </div>
           </div>
@@ -219,7 +377,7 @@ export function WeatherForecast() {
         {/* Bottom: Hourly trend horizontal row */}
         <div className="flex flex-col gap-1.5 shrink-0 pt-2 border-t border-border/40">
           <div className="grid grid-cols-5 gap-1.5">
-            {hourlyData.map((item, idx) => (
+            {hourlyForecast.map((item, idx) => (
               <div
                 key={idx}
                 className="flex flex-col items-center gap-1.5 p-1 rounded-lg bg-muted/20 border border-transparent"
